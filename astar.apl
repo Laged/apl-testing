@@ -18,11 +18,11 @@ adj←{
 }
 ⍝ Recursion towards goal
 astar←{
-     ×/⊃⍺=⍵:⊂⍵
+     ×/⍺=⍵:⊂⍵
      A←5 5 ⍝ Hard-coded 5x5 grid for now
      adjs←A adj ⍺
      targs←,(⍴adjs)⍴⊂⍵
-     (X Y)←↓[1]↑↑,/¨(targs-adjs)
+     (X Y)←↓[1]↑↑targs-adjs
      nxt←⊃adjs[⊃⍋((X*2)+(Y*2))*0.5]
      (⊂⍺),nxt ∇ ⍵
 }
@@ -40,7 +40,7 @@ nxt←{
 ⍝ Examples
 )copy display
 PP←DISPLAY
-a←5 5              ⍝ Area of grid
-grid←generate a    ⍝ Generated grid w/ 0 (empty) 1 (start) 2 (end) tiles
-solved←solve grid  ⍝ Added path (3) to grid from 1 (start) to 2 (end)
-nxt a              ⍝ Solve & draw the next floor   
+PP a←5 5            ⍝ Area of grid
+PP grid←gen a       ⍝ Generated grid w/ 0 (empty) 1 (start) 2 (end) tiles
+PP solved←slv grid  ⍝ Added path (3) to grid from 1 (start) to 2 (end)
+PP nxt a            ⍝ Solve & draw the next floor   
