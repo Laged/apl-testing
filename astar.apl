@@ -1,4 +1,11 @@
-⍝ Adjacent tiles in a ⍺ sized grid for given position ⍵
+⍝ Generating an empty grid (0) with random start (1) and end (2)
+gen←{
+     floor←⍵⍴0
+     ((?⍵)⌷floor)←1
+     ((?⍵)⌷floor)←2
+     floor
+ }
+ ⍝ Adjacent tiles in a ⍺ sized grid for given position ⍵
 adj←{
      cmpts←⍉↑¯1 0 1∘.,¯1 0 1
      dirs←,⊂[⎕IO]cmpts
@@ -11,17 +18,29 @@ adj←{
 }
 ⍝ Recursion towards goal
 astar←{
-     ×/⊃⍺=⍵:⍵
+     ×/⊃⍺=⍵:⊂⍵
      A←5 5 ⍝ Hard-coded 5x5 grid for now
      adjs←A adj ⍺
      targs←,(⍴adjs)⍴⊂⍵
      (X Y)←↓[1]↑↑,/¨(targs-adjs)
      nxt←⊃adjs[⊃⍋((X*2)+(Y*2))*0.5]
-     ,⍺,⊂nxt ∇ ⍵
+     (⊂⍺),nxt ∇ ⍵
 }
-⍝ Pretty-print with PP
+⍝ Solving a generated grid ⍵
+slv←{
+     grd←⍵
+     grd[¯1↓1↓(⊃⍸1=grd)astar(⊃⍸2=grd)]←3
+     grd
+}
+⍝ Solve & draw next floor
+nxt←{
+     ⍺←5 5
+     '·AB×'[1+slv gen ⍺]
+ }
+⍝ Examples
 )copy display
 PP←DISPLAY
-⍝ Examples
-PP 1 1 astar 5 5
-PP 2 2 astar 5 4
+a←5 5              ⍝ Area of grid
+grid←generate a    ⍝ Generated grid w/ 0 (empty) 1 (start) 2 (end) tiles
+solved←solve grid  ⍝ Added path (3) to grid from 1 (start) to 2 (end)
+nxt a              ⍝ Solve & draw the next floor   
