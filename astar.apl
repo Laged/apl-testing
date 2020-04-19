@@ -1,21 +1,9 @@
 ⍝ Generating an empty grid (0) with random start (1) and end (2)
-gen←{
-     floor←⍵⍴0
-     ((?⍵)⌷floor)←1
-     ((?⍵)⌷floor)←2
-     floor
- }
- ⍝ Adjacent tiles in a ⍺ sized grid for given position ⍵
-adj←{
-     cmpts←⍉↑¯1 0 1∘.,¯1 0 1
-     dirs←,⊂[⎕IO]cmpts
-     locs←9⍴⊂⍵
-     tops←9⍴⊂⍺
-     all←locs+dirs
-     top←{0≤⌊/⍵}¨tops-all
-     bot←0≠×/¨all
-     (top∧bot) / all
-}
+gen ← {A←⍵⍴0 ⋄ _←{((?⍴A)⌷A)←⍵}¨(1 2) ⋄ A}
+⍝ All adjacent tiles in a ⍺ sized grid for given position ⍵
+all ← {(9⍴⊂⍵)+,⊂[⎕IO]⍉↑¯1 0 1∘.,¯1 0 1}
+⍝ Usable tiles in ⍺ sized grid at location ⍵
+adj ← {a←⍺ ⋄ h←⍵ ⋄ m←all h ⋄ t←{0≤⌊/⍵}¨(9⍴⊂a)-m ⋄ b←0≠×/¨m ⋄ (t∧b)/m}
 ⍝ Recursion towards goal
 astar←{
      ×/⍺=⍵:⊂⍵
@@ -27,16 +15,10 @@ astar←{
      (⊂⍺),nxt ∇ ⍵
 }
 ⍝ Solving a generated grid ⍵
-slv←{
-     grd←⍵
-     grd[¯1↓1↓(⊃⍸1=grd)astar(⊃⍸2=grd)]←3
-     grd
-}
-⍝ Solve & draw next floor
-nxt←{
-     ⍺←5 5
-     '·AB×'[1+slv gen ⍺]
- }
+slv←{grd←⍵ ⋄_←grd[¯1↓1↓(⊃⍸1=grd)astar(⊃⍸2=grd)]←3 ⋄ grd}
+⍝ Solve & draw next floor in ⍺ sized grid
+nxt←{'·AB×'[1+slv gen ⍵]}
+
 ⍝ Examples
 )copy display
 PP←DISPLAY
